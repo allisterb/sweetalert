@@ -25,7 +25,16 @@ open WebSharper.InterfaceGenerator
 open WebSharper.JQuery
 
 module Definition =
-    let SweetAlert = Class "sweetAlert"
+    let SweetAlertResult = 
+        Generic - fun t ->
+            Interface "SweetAlertResult"
+            |+> [
+                "isConfirmed" =@ T<bool>
+                "isDenied" =@ T<bool>
+                "isDismissed" =@ T<bool>
+                "value" =? t
+                "dismiss" =? T<obj>
+            ]
 
     let SweetAlertProm =
         Class "SweetAlertPromise"
@@ -43,7 +52,7 @@ module Definition =
                 "titleText", T<string>
                 "text", T<string>
                 "html", T<string>
-                "type", T<string>
+                "icon", T<string>
                 "target", T<string>
                 "input", T<string>
                 "width", T<string>
@@ -87,12 +96,11 @@ module Definition =
                 "onClose", T<JavaScript.Dom.Node> ^-> T<unit>
                 "useRejections", T<bool>
             ]
-        }
-
-    SweetAlert
+        }    
+    let SweetAlert = 
+        Class "SweetAlert"
         |+> Static[
-            "showBox" => Box?box ^-> SweetAlertProm
-            |> WithInline ("return Sweetalert2($box);")
+            "fire" => Box?box ^-> SweetAlertProm 
             "isVisible" => T<unit> ^-> T<bool>
             "setDefaults" => Box ^-> T<unit>
             "resetDefaults" => T<unit> ^-> T<unit>
@@ -115,7 +123,7 @@ module Definition =
             "getInput" =? T<JavaScript.Dom.Node>
             "disableInput" => T<unit> ^-> T<unit>
             "enableInput" => T<unit> ^-> T<unit>
-            "queue" => Type.ArrayOf Box ^-> T<unit>
+            "mixin" => Box ^-> TSelf
             "getQueueStep" =? T<int>
             "insertQueueStep" => (Box * !? T<int>) ^-> T<unit>
             "deleteQueueStep" => T<int> ^-> T<unit>
@@ -123,22 +131,21 @@ module Definition =
             "setProgressSteps" => T<int> ^-> T<unit>
             "showProgressSteps" => T<unit> ^-> T<unit>
             "hideProgressSteps" => T<unit> ^-> T<unit>
-        ]|>ignore
- 
-
+        ]
+        |+> Instance [
+            "queue" => Type.ArrayOf Box ^-> T<Promise>
+        ]
+        
     let Assembly =
         Assembly [
             Namespace "WebSharper.SweetAlert.Resources" [
-                Resource "Css" "https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.6/sweetalert2.min.css"
-                |> AssemblyWide
-                Resource "Js" "https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.6/sweetalert2.min.js"
-                |> AssemblyWide
+                Resource "Css" "https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.9.0/sweetalert2.css" |> AssemblyWide
+                Resource "Js" "https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.9.0/sweetalert2.all.min.js" |> AssemblyWide
             ]
             Namespace "WebSharper.SweetAlert"[
                 Box
                 SweetAlert
                 SweetAlertProm
-
             ]
         ]
 

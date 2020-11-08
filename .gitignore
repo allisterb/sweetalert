@@ -11,3 +11,4 @@ obj/
 /paket-files/
 /.vscode/
 nuget/*.paket.template
+WebSharper.SweetAlert/.ionide/symbolCache.db
