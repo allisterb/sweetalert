@@ -139,8 +139,8 @@ module Definition =
     let Assembly =
         Assembly [
             Namespace "WebSharper.SweetAlert.Resources" [
-                Resource "Css" "https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.9.0/sweetalert2.css" |> AssemblyWide
-                Resource "Js" "https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.9.0/sweetalert2.all.min.js" |> AssemblyWide
+                Resource "Js" "https://cdn.jsdelivr.net/npm/sweetalert2@10.9.0/dist/sweetalert2.min.js" |> AssemblyWide
+                Resource "Css" "https://cdn.jsdelivr.net/npm/sweetalert2@10.9.0/dist/sweetalert2.min.css" |> AssemblyWide
             ]
             Namespace "WebSharper.SweetAlert"[
                 Box
