@@ -40,7 +40,7 @@ module Definition =
         Class "SweetAlertPromise"
         |=> Inherits T<Promise>
         |+> Instance [
-            "then" => T<string -> unit> ^-> T<unit>
+            "then" => (SweetAlertResult.[T<obj>]^->T<unit>)^->T<unit>
         ]
 
     let Box =
@@ -133,7 +133,7 @@ module Definition =
             "hideProgressSteps" => T<unit> ^-> T<unit>
         ]
         |+> Instance [
-            "queue" => Type.ArrayOf Box ^-> T<Promise>
+            "queue" => Type.ArrayOf Box ^-> SweetAlertProm
         ]
         
     let Assembly =
@@ -144,6 +144,7 @@ module Definition =
             ]
             Namespace "WebSharper.SweetAlert"[
                 Box
+                SweetAlertResult
                 SweetAlert
                 SweetAlertProm
             ]
