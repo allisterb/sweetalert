@@ -25,6 +25,19 @@ open WebSharper.InterfaceGenerator
 open WebSharper.JQuery
 
 module Definition =
+    let DismissReason =
+        Pattern.Config "DismissReason"{
+            Optional = [
+                "cancel", T<string>
+                "backdrop", T<string>
+                "close", T<string>
+                "esc", T<string>
+                "timer", T<string> 
+            ]
+            Required = []
+
+        }    
+
     let SweetAlertResult = 
         Generic - fun t ->
             Interface "SweetAlertResult"
@@ -32,8 +45,8 @@ module Definition =
                 "isConfirmed" =@ T<bool>
                 "isDenied" =@ T<bool>
                 "isDismissed" =@ T<bool>
-                "value" =? t
-                "dismiss" =? T<obj>
+                "value" =@ t
+                "dismiss" =@ DismissReason
             ]
 
     let SweetAlertProm =
@@ -96,7 +109,8 @@ module Definition =
                 "onClose", T<JavaScript.Dom.Node> ^-> T<unit>
                 "useRejections", T<bool>
             ]
-        }    
+        }
+
     let SweetAlert = 
         Class "SweetAlert"
         |+> Static[
@@ -143,6 +157,7 @@ module Definition =
                 Resource "Css" "https://cdn.jsdelivr.net/npm/sweetalert2@10.9.0/dist/sweetalert2.min.css" |> AssemblyWide
             ]
             Namespace "WebSharper.SweetAlert"[
+                DismissReason
                 Box
                 SweetAlertResult
                 SweetAlert
